@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { ThemeProvider } from 'styled-components'
+import * as themes from './styles/themes'
+import ThemeContext from './styles/themes/context'
+import TodoList from './components/TodoList'
+import ThemeSwitcher from './components/ThemeSwitcher'
 
 function App() {
+  const [theme, setTheme] = React.useState(themes.dark)
+
+  function toggleTheme() {
+    setTheme(theme === themes.dark ? themes.light : themes.dark)
+  } 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ThemeContext.Provider value={theme}>
+        <ThemeSwitcher toggleTheme={toggleTheme}/>
+        <ThemeContext.Consumer>
+          {theme => (
+            <ThemeProvider theme={theme}>
+              <TodoList/>
+            </ThemeProvider>
+          )}
+        </ThemeContext.Consumer>
+      </ThemeContext.Provider>
     </div>
-  );
+  )
 }
 
 export default App;
